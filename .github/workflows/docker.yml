@@ -39,12 +39,16 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
     - name: Build and push Docker image
       id: build-and-push
       uses: docker/build-push-action@a66e35b9cbcf4ad0ea91ffcaf7bbad63ad9e0229 # v2.7.0
       with:
         context: .
         push: ${{ github.event_name != 'pull_request' }}
+        platforms: linux/amd64,linux/arm64
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
